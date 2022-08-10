@@ -6,6 +6,7 @@ public abstract class Balance {
 
     private UUID customerId;
     private Double balance;
+    private String something;
 
     public Balance(UUID customerId, Double balance) {
         this.customerId = customerId;
