@@ -32,17 +32,13 @@ public class OrderServiceImpl implements OrderService{
         int paymentType = scanner.nextInt();
         boolean checkoutResult = false;
 
-        switch (paymentType){
-            case 1:
-                CheckoutService customerBalanceCheckoutService = new CustomerBalanceCheckoutServiceImpl();
-                checkoutResult = customerBalanceCheckoutService.checkout(cart.getCustomer(), amountAfterDiscount);
-                break;
-            case 2:
-                CheckoutService mixPaymentCheckoutService = new MixPaymentCheckoutServiceImpl();
-                checkoutResult = mixPaymentCheckoutService.checkout(cart.getCustomer(), amountAfterDiscount);
-                break;
-        }
+        CheckoutService checkoutService = null;
+        if (paymentType == 1)
+            checkoutService = new CustomerBalanceCheckoutServiceImpl();
+        else
+            checkoutService = new MixPaymentCheckoutServiceImpl();
 
+        checkoutResult = checkoutService.checkout(cart.getCustomer(), amountAfterDiscount);
 
         if (checkoutResult){
             Order order = new Order(UUID.randomUUID(), LocalDateTime.now(),
