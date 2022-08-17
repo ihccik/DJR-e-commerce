@@ -284,5 +284,6 @@ public class Main {
                 "Place an order","See Cart","See order details","See your address","Close App"};
     }
 
+    // This is DJR-2 ticket
 
 }
