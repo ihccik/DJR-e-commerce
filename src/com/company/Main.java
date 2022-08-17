@@ -179,6 +179,8 @@ public class Main {
                     printAddressByCustomerId(customer);
                     break;
                 case 9:
+                    printPhoneNumberMenu();
+                case 10:
                     System.exit(1);
                     break;
             }
@@ -186,6 +188,21 @@ public class Main {
 
         }
 
+    }
+
+    private static void printPhoneNumberMenu(){
+        System.out.println("1 for Add new phone number");
+        System.out.println("2 for List phone numbers");
+
+        Scanner scanner = new Scanner(System.in);
+        switch (scanner.nextInt()){
+            case 1:
+                //todo add phone number
+                break;
+            case 2:
+                //todo list phone numbers
+                break;
+        }
     }
 
     private static Discount findDiscountById(String discountId) throws Exception {
@@ -281,7 +298,7 @@ public class Main {
 
     private static String[] prepareMenuOptions(){
         return new String[]{"List Categories","List Products","List Discount","See Balance","Add Balance",
-                "Place an order","See Cart","See order details","See your address","Close App"};
+                "Place an order","See Cart","See order details","See your address", "Phone Numbers","Close App"};
     }
 
 
