@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class Customer {
@@ -21,6 +22,24 @@ public class Customer {
         this.userName = userName;
         this.email = email;
         this.address = address;
+    }
+
+    public Customer(UUID id) {
+        this.id = id;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        if (!email.matches("^(.+)@(.+)\\.(.+)$")){
+
+            System.err.println("Invalid Email address try again");
+
+            setEmail(new Scanner(System.in).nextLine());
+
+        }else this.email = email;
     }
 
     public UUID getId() {
