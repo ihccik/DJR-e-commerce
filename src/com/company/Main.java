@@ -18,10 +18,8 @@ import static com.company.StaticConstants.*;
 
 public class Main {
 
-    public static void main(String[] args) {
     private static Customer customer;
-
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         DataGenerator.createCustomer();
         DataGenerator.createCategory();
