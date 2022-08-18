@@ -19,6 +19,8 @@ import static com.company.StaticConstants.ORDER_LIST;
 
 public class Main {
 
+    private static Customer customer;
+
     public static void main(String[] args)  {
 
         DataGenerator.createCustomer();
@@ -34,7 +36,7 @@ public class Main {
             System.out.println("Type " + i + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
         }
 
-        Customer customer = StaticConstants.CUSTOMER_LIST.get(scanner.nextInt());
+        customer = StaticConstants.CUSTOMER_LIST.get(scanner.nextInt());
 
         Cart cart = new Cart(customer);
 
@@ -180,6 +182,25 @@ public class Main {
                     break;
                 case 9:
                     printPhoneNumberMenu();
+                    int userChoice = scanner.nextInt();
+                    if (userChoice == 1){
+                        System.out.println("Write the phone number to add (only digits)");
+                        customer.getPhoneNumbers().add(scanner.nextLong());
+                        printPhoneNumberMenu();
+                        userChoice = scanner.nextInt();
+                        if (userChoice == 4){
+                            continue;
+                        }
+                    }
+                    else if (userChoice == 2){
+                        //todo @Glenio your ticket for editing an existing number
+                    }
+                    else if (userChoice == 3){
+                        //todo for deleting a phone number
+                    }
+                    else if (userChoice == 4){
+                        continue;
+                    }
                 case 10:
                     System.exit(1);
                     break;
@@ -191,17 +212,22 @@ public class Main {
     }
 
     private static void printPhoneNumberMenu(){
+        listPhoneNumbers();
         System.out.println("1 for Add new phone number");
-        System.out.println("2 for List phone numbers");
+        System.out.println("2 for Edit a phone number");
+        System.out.println("3 for Delete a phone number");
+        System.out.println("4 for return to main menu");
+    }
 
-        Scanner scanner = new Scanner(System.in);
-        switch (scanner.nextInt()){
-            case 1:
-                //todo add phone number
-                break;
-            case 2:
-                //todo list phone numbers
-                break;
+    private static void listPhoneNumbers(){
+        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()){
+            System.out.println("There is no phone related to your account");
+        }
+        else {
+            System.out.println("Phone numbers:");
+            for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
+                System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
+            }
         }
     }
 
