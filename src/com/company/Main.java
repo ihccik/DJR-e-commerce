@@ -19,6 +19,9 @@ import static com.company.StaticConstants.*;
 public class Main {
 
     public static void main(String[] args) {
+    private static Customer customer;
+
+    public static void main(String[] args)  {
 
         DataGenerator.createCustomer();
         DataGenerator.createCategory();
@@ -46,6 +49,7 @@ public class Main {
 
             createNewCustomer();
         }
+        customer = StaticConstants.CUSTOMER_LIST.get(scanner.nextInt());
 
         Cart cart = new Cart(customer);
 
@@ -191,6 +195,27 @@ public class Main {
                     printAddressByCustomerId(customer);
                     break;
                 case 9:
+                    printPhoneNumberMenu();
+                    int userChoice = scanner.nextInt();
+                    if (userChoice == 1){
+                        System.out.println("Write the phone number to add (only digits)");
+                        customer.getPhoneNumbers().add(scanner.nextLong());
+                        printPhoneNumberMenu();
+                        userChoice = scanner.nextInt();
+                        if (userChoice == 4){
+                            continue;
+                        }
+                    }
+                    else if (userChoice == 2){
+                        //todo @Glenio your ticket for editing an existing number
+                    }
+                    else if (userChoice == 3){
+                        //todo for deleting a phone number
+                    }
+                    else if (userChoice == 4){
+                        continue;
+                    }
+                case 10:
                     System.exit(1);
                     break;
             }
@@ -213,6 +238,26 @@ public class Main {
         newCustomer.setEmail(new Scanner(System.in).nextLine());
 
         CUSTOMER_LIST.add(newCustomer);
+    }
+
+    private static void printPhoneNumberMenu(){
+        listPhoneNumbers();
+        System.out.println("1 for Add new phone number");
+        System.out.println("2 for Edit a phone number");
+        System.out.println("3 for Delete a phone number");
+        System.out.println("4 for return to main menu");
+    }
+
+    private static void listPhoneNumbers(){
+        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()){
+            System.out.println("There is no phone related to your account");
+        }
+        else {
+            System.out.println("Phone numbers:");
+            for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
+                System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
+            }
+        }
     }
 
     private static Discount findDiscountById(String discountId) throws Exception {
@@ -308,8 +353,9 @@ public class Main {
 
     private static String[] prepareMenuOptions(){
         return new String[]{"List Categories","List Products","List Discount","See Balance","Add Balance",
-                "Place an order","See Cart","See order details","See your address","Close App"};
+                "Place an order","See Cart","See order details","See your address", "Phone Numbers","Close App"};
     }
 
 
 }
+// DJR-6 COMMIT

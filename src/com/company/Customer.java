@@ -10,6 +10,7 @@ public class Customer {
     private String userName;
     private String email;
     private List<Address> address;
+    private List<Long> phoneNumbers;
 
     public Customer(UUID id, String userName, String email) {
         this.id = id;
@@ -22,6 +23,18 @@ public class Customer {
         this.userName = userName;
         this.email = email;
         this.address = address;
+    }
+
+    public Customer(UUID id, String userName, String email, List<Address> address, List<Long> phoneNumbers) {
+        this.id = id;
+        this.userName = userName;
+        this.email = email;
+        this.address = address;
+        this.phoneNumbers = phoneNumbers;
+    }
+
+    public List<Long> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
     public Customer(UUID id) {
