@@ -17,6 +17,10 @@ import java.util.UUID;
 
 public class DataGenerator {
 
+    public static void just(){
+
+    }
+
     public static void createCustomer(){
 
         Address address1Customer1 = new Address("7925","Jones Branch Dr","Suite 3300","22102","VA");
@@ -27,7 +31,11 @@ public class DataGenerator {
         customer1AddressList.add(address1Customer1);
         customer1AddressList.add(address2Customer1);
 
-        Customer customer1 = new Customer(UUID.randomUUID(),"ozzy","ozzy@cydeo.com",customer1AddressList);
+        ArrayList<Long> phoneNumbers = new ArrayList<>();
+        phoneNumbers.add(34576589755L);
+        phoneNumbers.add(33344556677L);
+
+        Customer customer1 = new Customer(UUID.randomUUID(),"ozzy","ozzy@cydeo.com",customer1AddressList, phoneNumbers);
         Customer customer2 = new Customer(UUID.randomUUID(),"mike","mike@gmail.com");
 
         StaticConstants.CUSTOMER_LIST.add(customer1);
