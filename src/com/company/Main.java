@@ -9,6 +9,7 @@ import com.company.order.Order;
 import com.company.order.OrderService;
 import com.company.order.OrderServiceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -37,7 +38,7 @@ public class Main {
 
         int costumerChoice = scanner.nextInt();
 
-        Customer customer = null;
+        customer = null;
 
         if (costumerChoice != 0) {
 
@@ -47,7 +48,7 @@ public class Main {
 
             createNewCustomer();
         }
-        customer = StaticConstants.CUSTOMER_LIST.get(scanner.nextInt());
+        customer = StaticConstants.CUSTOMER_LIST.get(StaticConstants.CUSTOMER_LIST.size() - 1);
 
         Cart cart = new Cart(customer);
 

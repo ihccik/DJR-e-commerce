@@ -1,5 +1,6 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -10,7 +11,7 @@ public class Customer {
     private String userName;
     private String email;
     private List<Address> address;
-    private List<Long> phoneNumbers;
+    private List<Long> phoneNumbers = new ArrayList<>();
 
     public Customer(UUID id, String userName, String email) {
         this.id = id;
