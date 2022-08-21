@@ -40,12 +40,16 @@ public class Main {
 
         customer = null;
 
-        if (costumerChoice != 0) {
+        while(costumerChoice != 0) {
+            try{
+                customer=StaticConstants.CUSTOMER_LIST.get(costumerChoice-1);
+            }catch(IndexOutOfBoundsException c){
+                System.err.println("The user doesn't exist. Please, try again.");
+                break;
+            }
+        }
 
-            customer = StaticConstants.CUSTOMER_LIST.get(costumerChoice-1);
-
-        }else {
-
+        if(costumerChoice==0){
             createNewCustomer();
         }
         customer = StaticConstants.CUSTOMER_LIST.get(StaticConstants.CUSTOMER_LIST.size() - 1);
