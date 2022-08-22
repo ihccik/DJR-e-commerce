@@ -15,4 +15,6 @@ public class GiftCardBalance extends Balance{
         setBalance(getBalance() + additionalBalance + promotionAmount);
         return getBalance();
     }
+
+
 }
