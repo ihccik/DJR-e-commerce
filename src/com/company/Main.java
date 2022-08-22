@@ -70,18 +70,20 @@ public class Main {
             System.out.println("What would you like to do? Just type id for selection");
 
             for (int i = 0; i < prepareMenuOptions().length; i++) {
-                System.out.println(i + "-" + prepareMenuOptions()[i]);
+                System.out.println((i + 1) + " - " + prepareMenuOptions()[i]);
             }
+            System.out.println("0 - Close App");
 
             int menuSelection = scanner.nextInt();
 
             switch (menuSelection) {
-                case 0: //list categories
+                case 1: //list categories
                     for (Category category : StaticConstants.CATEGORY_LIST) {
                         System.out.println("Category Code:" + category.generateCategoryCode() + " category name:" + category.getName());
                     }
+                    returnToMenu();
                     break;
-                case 1: //list products  //product name, product category name
+                case 2: //list products  //product name, product category name
                     try {
                         for (Product product : StaticConstants.PRODUCT_LIST) {
                             System.out.println("Product Name:" + product.getName() + "Product Category Name:" + product.getCategoryName());
@@ -89,21 +91,24 @@ public class Main {
                     } catch (Exception e) {
                         System.out.println("Product could not printed because category not found for product name:" + e.getMessage().split(",")[1]);
                     }
+                    returnToMenu();
                     break;
-                case 2: //list discounts
+                case 3: //list discounts
                     for (Discount discount : StaticConstants.DISCOUNT_LIST) {
                         System.out.println("Discount Name: " + discount.getName() + "discount threshold amount: " + discount.getThresholdAmount());
                     }
+                    returnToMenu();
                     break;
-                case 3://see balance
+                case 4://see balance
                     CustomerBalance cBalance = findCustomerBalance(customer.getId());
                     GiftCardBalance gBalance = findGiftCardBalance(customer.getId());
                     double totalBalance = cBalance.getBalance() + gBalance.getBalance();
                     System.out.println("Total Balance:" + totalBalance);
                     System.out.println("Customer Balance:" + cBalance.getBalance());
                     System.out.println("Gift Card Balance:" + gBalance.getBalance());
+                    returnToMenu();
                     break;
-                case 4://add balance
+                case 5://add balance
                     CustomerBalance customerBalance = findCustomerBalance(customer.getId());
                     GiftCardBalance giftCardBalance = findGiftCardBalance(customer.getId());
                     System.out.println("Which Account would you like to add?");
@@ -112,7 +117,6 @@ public class Main {
                     int balanceAccountSelection = scanner.nextInt();
                     System.out.println("How much you would like to add?");
                     double additionalAmount = scanner.nextInt();
-
                     switch (balanceAccountSelection) {
                         case 1:
                             customerBalance.addBalance(additionalAmount);
@@ -124,7 +128,7 @@ public class Main {
                             break;
                     }
                     break;
-                case 5://place an order
+                case 6://place an order
                     Map<Product, Integer> map = new HashMap<>();
                     cart.setProductMap(map);
                     while (true) {
@@ -190,7 +194,7 @@ public class Main {
                         System.out.println(result);
                     }
                     break;
-                case 6://See cart
+                case 7://See cart
                     System.out.println("Your Cart");
                     if (!cart.getProductMap().keySet().isEmpty()) {
                         for (Product product : cart.getProductMap().keySet()) {
@@ -199,14 +203,17 @@ public class Main {
                     } else {
                         System.out.println("Your cart is empty");
                     }
+                    returnToMenu();
                     break;
-                case 7://see order details
+                case 8://see order details
                     printOrdersByCustomerId(customer.getId());
+                    returnToMenu();
                     break;
-                case 8://see your address
+                case 9://see your address
                     printAddressByCustomerId(customer);
+                    returnToMenu();
                     break;
-                case 9:
+                case 10:
                     printPhoneNumberMenu();
                     int userChoice = scanner.nextInt();
                     if (userChoice == 1){
@@ -227,7 +234,7 @@ public class Main {
                     else if (userChoice == 4){
                         continue;
                     }
-                case 10:
+                case 0:
                     System.exit(1);
                     break;
             }
@@ -365,7 +372,18 @@ public class Main {
 
     private static String[] prepareMenuOptions(){
         return new String[]{"List Categories","List Products","List Discount","See Balance","Add Balance",
-                "Place an order","See Cart","See order details","See your address", "Phone Numbers","Close App"};
+                "Place an order","See Cart","See order details","See your address", "Phone Numbers"};
+    }
+
+    private static void returnToMenu() {
+
+        System.out.println("0 - Back");
+
+        int n = 1;
+
+        while (n != 0){
+            n = new Scanner(System.in).nextInt();
+        }
     }
 
 
