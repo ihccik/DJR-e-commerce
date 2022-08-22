@@ -9,6 +9,7 @@ import com.company.order.Order;
 import com.company.order.OrderService;
 import com.company.order.OrderServiceImpl;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,10 +120,12 @@ public class Main {
                         for (Product product : StaticConstants.PRODUCT_LIST) {
                             try {
                                 System.out.println(
-                                        "id:" + product.getId() + "price:" + product.getPrice() +
-                                                "product category" + product.getCategoryName() +
-                                                "stock:" + product.getRemainingStock() +
-                                                "product delivery due:" + product.getDeliveryDueDate());
+                                        "product name: "+ product.getName()+ "\n"+"\n"+
+                                         "id: " + product.getId()+ "\n" + "\n"+
+                                         "price: " + product.getPrice() +"\n"+ "\n"+
+                                         "product category: " + product.getCategoryName() + "\n"+ "\n"+
+                                         "stock: " + product.getRemainingStock() + "\n"+ "\n"+
+                                         "product delivery due: " + product.getDeliveryDueDate()+ "\n");
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());
                                 ;
