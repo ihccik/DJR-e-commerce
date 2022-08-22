@@ -37,13 +37,9 @@ public class Main {
 
         int costumerChoice = scanner.nextInt();
 
-        Customer customer = null;
+        Customer customer;
 
-        if (costumerChoice != 0) {
-
-            customer = StaticConstants.CUSTOMER_LIST.get(costumerChoice-1);
-
-        }else {
+        if (costumerChoice == 0) {
 
             createNewCustomer();
         }
