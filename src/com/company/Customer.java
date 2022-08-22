@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class Customer {
 
@@ -43,13 +44,25 @@ public class Customer {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+
+        if (StaticConstants.CUSTOMER_LIST.stream().map(Customer::getUserName).anyMatch(s -> s.equals(userName))){
+
+            System.err.println("This user name already taken");
+
+            setEmail(new Scanner(System.in).nextLine());
+
+        }else this.userName = userName;
     }
 
     public void setEmail(String email) {
-        if (!email.matches("^(.+)@(.+)\\.(.+)$")){
 
-            System.err.println("Invalid Email address try again");
+        boolean alreadyUsed = StaticConstants.CUSTOMER_LIST.stream().map(Customer::getEmail).anyMatch(s -> s.equals(email));
+
+        if (!email.matches("^(.+)@(.+)\\.(.+)$") || alreadyUsed){
+
+            if (alreadyUsed){
+                System.err.println("There is already an account with that email");
+            }else System.err.println("Invalid Email address try again");
 
             setEmail(new Scanner(System.in).nextLine());
 

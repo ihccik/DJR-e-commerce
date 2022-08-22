@@ -19,8 +19,7 @@ import static com.company.StaticConstants.*;
 
 public class Main {
 
-    private static Customer customer;
-    public static void main(String[] args) {
+    static {
 
         DataGenerator.createCustomer();
         DataGenerator.createCategory();
@@ -28,38 +27,42 @@ public class Main {
         DataGenerator.createBalance();
         DataGenerator.createDiscount();
 
-        Scanner scanner = new Scanner(System.in);
-while(true) {
-    System.out.println("Select Customer:");
-    System.out.println("Type 0 for creating new customer");
-    for (int i = 0; i < StaticConstants.CUSTOMER_LIST.size(); i++) {
-        System.out.println("Type " + (i + 1) + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
     }
+    private static Customer customer;
+    public static void main(String[] args) {
 
-    int costumerChoice = scanner.nextInt();
+        Scanner scanner = new Scanner(System.in);
 
-    customer = null;
+        while(true) {
 
-    if (costumerChoice != 0) {
-        try {
-            if (CUSTOMER_LIST.contains(CUSTOMER_LIST.get(costumerChoice - 1))) {
-                customer = StaticConstants.CUSTOMER_LIST.get(costumerChoice - 1);
+            System.out.println("Select Customer:");
+
+            System.out.println("Type 0 for creating new customer");
+
+            for (int i = 0; i < StaticConstants.CUSTOMER_LIST.size(); i++) {
+                System.out.println("Type " + (i + 1) + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
+            }
+
+            int costumerChoice = scanner.nextInt();
+
+            customer = null;
+
+            if (costumerChoice == 0) {
+
+                createNewCustomer();
+                customer = CUSTOMER_LIST.get(CUSTOMER_LIST.size() - 1);
                 break;
             }
-        } catch (IndexOutOfBoundsException c) {
-            System.err.println("The user doesn't exist. Please, try again.");
+
+            try {
+                customer = CUSTOMER_LIST.get(costumerChoice - 1);
+                break;
+
+            } catch (IndexOutOfBoundsException c) {
+                System.err.println("The user doesn't exist. Please, try again.");
+            }
+
         }
-    }
-
-    if (costumerChoice == 0) {
-
-        createNewCustomer();
-        break;
-    }
-}
-    customer = StaticConstants.CUSTOMER_LIST.get(StaticConstants.CUSTOMER_LIST.size() - 1);
-
-
         Cart cart = new Cart(customer);
 
         while (true) {
