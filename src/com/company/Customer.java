@@ -49,7 +49,7 @@ public class Customer {
 
             System.err.println("This user name already taken");
 
-            setEmail(new Scanner(System.in).nextLine());
+            setUserName(new Scanner(System.in).nextLine());
 
         }else this.userName = userName;
     }
