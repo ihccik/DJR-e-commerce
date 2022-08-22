@@ -371,6 +371,7 @@ public class Main {
 
 
     private static String[] prepareMenuOptions(){
+
         return new String[]{"List Categories","List Products","List Discount","See Balance","Add Balance",
                 "Place an order","See Cart","See order details","See your address", "Phone Numbers"};
     }
