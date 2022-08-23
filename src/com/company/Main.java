@@ -92,7 +92,7 @@ public class Main {
                         double transferringAmount = scanner.nextDouble();
                         if (transferringAmount > cBalance.getBalance()) {
                             System.err.println("Invalid Value: " + transferringAmount);
-                            continue;
+                            System.exit(0);
                         }
                         System.out.println("Total Balance:" + totalBalance);
                         cBalance.addBalance((-1)*transferringAmount);
@@ -104,7 +104,7 @@ public class Main {
                         double transferringAmount = scanner.nextDouble();
                         if (transferringAmount > gBalance.getBalance()) {
                             System.err.println("Invalid Value: " + transferringAmount);
-                            continue;
+                            System.exit(0);
                         }
                         System.out.println("Total Balance:" + totalBalance);
                         cBalance.addBalance((1)*transferringAmount);
