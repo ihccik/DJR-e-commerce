@@ -51,6 +51,7 @@ public class Main {
             int menuSelection = scanner.nextInt();
 
             switch (menuSelection) {
+
                 case 0: //list categories
                     for (Category category : StaticConstants.CATEGORY_LIST) {
                         System.out.println("Category Code:" + category.generateCategoryCode() + " category name:" + category.getName());
@@ -188,30 +189,32 @@ public class Main {
                         if (userChoice == 1) {
                             System.out.println("Write the phone number to add (only digits)");
                             customer.getPhoneNumbers().add(scanner.nextLong());
-                            continue;
+                            //continue;
 
                         } else if (userChoice == 2) {
                             //todo @Glenio your ticket for editing an existing number
                             boolean isNum = true;
                             int editNumberId = 0;
-
+                            scanner.nextLine();
                             while (isNum) {
 
                                 System.out.println("Select phone number that you want to edit, use id number:\n");
                                 listPhoneNumbers();
-                                if (!scanner.hasNextInt()) {
-                                    scanner.nextLine();
+
+                                String input = scanner.nextLine();
+                                if (!input.matches("^[0-9]+$")) {
+
                                     System.err.println("*********** Wrong Input, please try again *************\n");
                                     continue;
 
                                 } else {
-                                    editNumberId = scanner.nextInt();
-                                    if (editNumberId > (customer.getPhoneNumbers().size() - 1)) {
+
+                                    if (Integer.parseInt(input) > (customer.getPhoneNumbers().size() - 1)) {
                                         System.out.println("Id invalid, please try again:\n");
                                         continue;
                                     }
                                 }
-                                scanner.nextLine();
+
                                 while (true) {
                                     System.out.println("Enter new phone number");
                                     if (!scanner.hasNextInt()) {
@@ -228,11 +231,11 @@ public class Main {
                             }
                             System.out.println("Phone " + editNumberId + " has been updated to :" + customer.getPhoneNumbers().get(editNumberId));
 
-                            continue;
+                            //continue;
 
                         } else if (userChoice == 3) {
                             //todo for deleting a phone number
-                            continue;
+                            // continue;
                         } else if (userChoice == 4) {
                             break;
                         }
