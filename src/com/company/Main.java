@@ -182,161 +182,186 @@ public class Main {
                     printAddressByCustomerId(customer);
                     break;
                 case 9:
-                    printPhoneNumberMenu();
-                    int userChoice = scanner.nextInt();
-                    if (userChoice == 1) {
-                        System.out.println("Write the phone number to add (only digits)");
-                        customer.getPhoneNumbers().add(scanner.nextLong());
+                    while (true) {
                         printPhoneNumberMenu();
-                        userChoice = scanner.nextInt();
-                        if (userChoice == 4) {
+                        int userChoice = scanner.nextInt();
+                        if (userChoice == 1) {
+                            System.out.println("Write the phone number to add (only digits)");
+                            customer.getPhoneNumbers().add(scanner.nextLong());
                             continue;
-                        }
-                    } else if (userChoice == 2) {
-                        //todo @Glenio your ticket for editing an existing number
-                        while (true) {
-                            System.out.println("Select phone number that you want to edit, use id number:");
-                            int editNumberId = scanner.nextInt();
-                            if (editNumberId > (customer.getPhoneNumbers().size()) - 1)  {// another character crash the code
-                                System.out.println("id invalid try again");
-                                continue;
+
+                        } else if (userChoice == 2) {
+                            //todo @Glenio your ticket for editing an existing number
+                            boolean isNum = true;
+                            int editNumberId = 0;
+
+                            while (isNum) {
+
+                                System.out.println("Select phone number that you want to edit, use id number:\n");
+                                listPhoneNumbers();
+                                if (!scanner.hasNextInt()) {
+                                    scanner.nextLine();
+                                    System.err.println("*********** Wrong Input, please try again *************\n");
+                                    continue;
+
+                                } else {
+                                    editNumberId = scanner.nextInt();
+                                    if (editNumberId > (customer.getPhoneNumbers().size() - 1)) {
+                                        System.out.println("Id invalid, please try again:\n");
+                                        continue;
+                                    }
+                                }
+                                scanner.nextLine();
+                                while (true) {
+                                    System.out.println("Enter new phone number");
+                                    if (!scanner.hasNextInt()) {
+                                        scanner.nextLine();
+                                        System.err.println("*********** Wrong Input, please try again *************\n");
+                                        continue;
+                                    } else {
+                                        Long newPhoneNumber = scanner.nextLong();
+                                        customer.getPhoneNumbers().set(editNumberId, newPhoneNumber);
+                                        isNum = false;
+                                        break;
+                                    }
+                                }
                             }
-                            System.out.println("Enter new phone number");
-                            Long newPhoneNumber = scanner.nextLong();
-                            customer.getPhoneNumbers().add(editNumberId,newPhoneNumber);
-                            //customer.getPhoneNumbers().forEach(System.out.println());
-                        }
-                    }
-                    else if (userChoice == 3) {
-                            //todo for deleting a phone number
-                        } else if (userChoice == 4) {
+                            System.out.println("Phone " + editNumberId + " has been updated to :" + customer.getPhoneNumbers().get(editNumberId));
+
                             continue;
-                        }
-                        case 10:
-                            System.exit(1);
+
+                        } else if (userChoice == 3) {
+                            //todo for deleting a phone number
+                            continue;
+                        } else if (userChoice == 4) {
                             break;
+                        }
                     }
-
-
+                    break;
+                case 10:
+                    System.exit(1);
+                    break;
             }
 
-        }
-
-        private static void printPhoneNumberMenu () {
-            listPhoneNumbers();
-            System.out.println("1 for Add new phone number");
-            System.out.println("2 for Edit a phone number");
-            System.out.println("3 for Delete a phone number");
-            System.out.println("4 for return to main menu");
-        }
-
-        private static void listPhoneNumbers () {
-            if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()) {
-                System.out.println("There is no phone related to your account");
-            } else {
-                System.out.println("Phone numbers:");
-                for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
-                    System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
-                }
-            }
-        }
-
-        private static Discount findDiscountById (String discountId) throws Exception {
-            for (Discount discount : DISCOUNT_LIST) {
-                if (discount.getId().toString().equals(discountId)) {
-                    return discount;
-                }
-            }
-            throw new Exception("Discount couldn't applied because couldn't found");
-        }
-
-        private static void updateProductStock (Map < Product, Integer > map){
-            for (Product product : map.keySet()) {
-                product.setRemainingStock(product.getRemainingStock() - map.get(product));
-            }
-        }
-
-        private static void printOrdersByCustomerId (UUID customerId){
-            for (Order order : ORDER_LIST) {
-                if (order.getCustomerId().toString().equals(customerId.toString())) {
-                    System.out.println("Order status: " + order.getOrderStatus() + " order amount " + order.getPaidAmount() + " order date " + order.getOrderDate());
-                }
-            }
-        }
-
-        private static void printAddressByCustomerId (Customer customer){
-            for (Address address : customer.getAddress()) {
-                System.out.println(" Street Name: " + address.getStreetName() +
-                        " Street Number: " + address.getStreetNumber() + "ZipCode:  "
-                        + address.getZipCode() + " State: " + address.getState());
-            }
-        }
-
-        private static boolean putItemToCartIfStockAvailable (Cart cart, Product product){
-
-            System.out.println("Please provide product count:");
-            Scanner scanner = new Scanner(System.in);
-            int count = scanner.nextInt();
-
-            Integer cartCount = cart.getProductMap().get(product);
-
-            if (cartCount != null && product.getRemainingStock() > cartCount + count) {
-                cart.getProductMap().put(product, cartCount + count);
-                return true;
-
-            } else if (product.getRemainingStock() >= count) {
-                cart.getProductMap().put(product, count);
-                return true;
-            }
-            return false; //BREAK TILL 3:10 PM
 
         }
-
-        private static Product findProductById (String productId) throws Exception {
-            for (Product product : StaticConstants.PRODUCT_LIST) {
-                if (product.getId().toString().equals(productId)) {
-                    return product;
-                }
-            }
-            throw new Exception("Product not found");
-        }
-
-
-        private static CustomerBalance findCustomerBalance (UUID customerId){
-            for (Balance customerBalance : StaticConstants.CUSTOMER_BALANCE_LIST) {
-                if (customerBalance.getCustomerId().toString().equals(customerId.toString())) {
-                    return (CustomerBalance) customerBalance;
-                }
-            }
-
-            CustomerBalance customerBalance = new CustomerBalance(customerId, 0d);
-            StaticConstants.CUSTOMER_BALANCE_LIST.add(customerBalance);
-
-            return customerBalance;
-        }
-
-        private static GiftCardBalance findGiftCardBalance (UUID customerId){
-            for (Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST) {
-                if (giftCarBalance.getCustomerId().toString().equals(customerId.toString())) {
-                    return (GiftCardBalance) giftCarBalance;
-                }
-            }
-
-            GiftCardBalance giftCarBalance = new GiftCardBalance(customerId, 0d);
-            StaticConstants.GIFT_CARD_BALANCE_LIST.add(giftCarBalance);
-
-            return giftCarBalance;
-        }
-
-
-        private static String[] prepareMenuOptions () {
-            return new String[]{"List Categories", "List Products", "List Discount", "See Balance", "Add Balance",
-                    "Place an order", "See Cart", "See order details", "See your address", "Phone Numbers", "Close App"};
-        }
-
 
     }
 
+    private static void printPhoneNumberMenu() {
+        listPhoneNumbers();
+        System.out.println("1 for Add new phone number");
+        System.out.println("2 for Edit a phone number");
+        System.out.println("3 for Delete a phone number");
+        System.out.println("4 for return to main menu");
+    }
+
+    private static void listPhoneNumbers() {
+        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()) {
+            System.out.println("There is no phone related to your account");
+        } else {
+            System.out.println("Phone numbers:");
+            for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
+                System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
+            }
+        }
+    }
+
+    private static Discount findDiscountById(String discountId) throws Exception {
+        for (Discount discount : DISCOUNT_LIST) {
+            if (discount.getId().toString().equals(discountId)) {
+                return discount;
+            }
+        }
+        throw new Exception("Discount couldn't applied because couldn't found");
+    }
+
+    private static void updateProductStock(Map<Product, Integer> map) {
+        for (Product product : map.keySet()) {
+            product.setRemainingStock(product.getRemainingStock() - map.get(product));
+        }
+    }
+
+    private static void printOrdersByCustomerId(UUID customerId) {
+        for (Order order : ORDER_LIST) {
+            if (order.getCustomerId().toString().equals(customerId.toString())) {
+                System.out.println("Order status: " + order.getOrderStatus() + " order amount " + order.getPaidAmount() + " order date " + order.getOrderDate());
+            }
+        }
+    }
+
+    private static void printAddressByCustomerId(Customer customer) {
+        for (Address address : customer.getAddress()) {
+            System.out.println(" Street Name: " + address.getStreetName() +
+                    " Street Number: " + address.getStreetNumber() + "ZipCode:  "
+                    + address.getZipCode() + " State: " + address.getState());
+        }
+    }
+
+    private static boolean putItemToCartIfStockAvailable(Cart cart, Product product) {
+
+        System.out.println("Please provide product count:");
+        Scanner scanner = new Scanner(System.in);
+        int count = scanner.nextInt();
+
+        Integer cartCount = cart.getProductMap().get(product);
+
+        if (cartCount != null && product.getRemainingStock() > cartCount + count) {
+            cart.getProductMap().put(product, cartCount + count);
+            return true;
+
+        } else if (product.getRemainingStock() >= count) {
+            cart.getProductMap().put(product, count);
+            return true;
+        }
+        return false; //BREAK TILL 3:10 PM
+
+    }
+
+    private static Product findProductById(String productId) throws Exception {
+        for (Product product : StaticConstants.PRODUCT_LIST) {
+            if (product.getId().toString().equals(productId)) {
+                return product;
+            }
+        }
+        throw new Exception("Product not found");
+    }
+
+
+    private static CustomerBalance findCustomerBalance(UUID customerId) {
+        for (Balance customerBalance : StaticConstants.CUSTOMER_BALANCE_LIST) {
+            if (customerBalance.getCustomerId().toString().equals(customerId.toString())) {
+                return (CustomerBalance) customerBalance;
+            }
+        }
+
+        CustomerBalance customerBalance = new CustomerBalance(customerId, 0d);
+        StaticConstants.CUSTOMER_BALANCE_LIST.add(customerBalance);
+
+        return customerBalance;
+    }
+
+    private static GiftCardBalance findGiftCardBalance(UUID customerId) {
+        for (Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST) {
+            if (giftCarBalance.getCustomerId().toString().equals(customerId.toString())) {
+                return (GiftCardBalance) giftCarBalance;
+            }
+        }
+
+        GiftCardBalance giftCarBalance = new GiftCardBalance(customerId, 0d);
+        StaticConstants.GIFT_CARD_BALANCE_LIST.add(giftCarBalance);
+
+        return giftCarBalance;
+    }
+
+
+    private static String[] prepareMenuOptions() {
+        return new String[]{"List Categories", "List Products", "List Discount", "See Balance", "Add Balance",
+                "Place an order", "See Cart", "See order details", "See your address", "Phone Numbers", "Close App"};
+    }
+
+
+}
 
 
 // DJR-6 COMMIT
