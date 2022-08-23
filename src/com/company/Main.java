@@ -231,19 +231,15 @@ while(true) {
                     customerBalance = findCustomerBalance(customer.getId());
                     giftCardBalance = findGiftCardBalance(customer.getId());
 
-                    BalanceActions balanceActions = new BalanceActions() {
-                        @Override
-                        public boolean transferAccountBalanceToGiftCardBalance(double amount,
-                            GiftCardBalance giftCardBalance) {
-                            if (amount > customerBalance.getBalance()){
-                                throw new RuntimeException("Amount is bigger than your balance");
-                            }
-                            else {
-                                giftCardBalance.addBalance(amount);
-                                customerBalance.setBalance(customerBalance.getBalance() - amount);
-                            }
-                            return true;
+                    BalanceActions balanceActions = (double amount, GiftCardBalance gcBalance) -> {
+                        if (amount > customerBalance.getBalance()){
+                            throw new RuntimeException("Amount is bigger than your balance");
                         }
+                        else {
+                            gcBalance.addBalance(amount);
+                            customerBalance.setBalance(customerBalance.getBalance() - amount);
+                        }
+                        return true;
                     };
 
                     if (balanceActions.transferAccountBalanceToGiftCardBalance(amountToTransfer, giftCardBalance)){
