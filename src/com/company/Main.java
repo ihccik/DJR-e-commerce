@@ -78,6 +78,41 @@ public class Main {
                     System.out.println("Total Balance:" + totalBalance);
                     System.out.println("Customer Balance:" + cBalance.getBalance());
                     System.out.println("Gift Card Balance:" + gBalance.getBalance());
+                    System.out.println("Would you like to transfer between your balances?");
+                    System.out.println("Type 0 for NO");
+                    System.out.println("Type 1 for transferring from Customer Balance to Gift Card Balance");
+                    System.out.println("Type 2 for transferring from Gift Card Balance to Customer Balance");
+
+                    int selection = scanner.nextInt();
+
+                    if (selection == 0) {
+                        continue;
+                    } else if (selection == 1) {
+                        System.out.println("How much would you like to transfer? Customer Balance --> Gift Card");
+                        double transferringAmount = scanner.nextDouble();
+                        if (transferringAmount > cBalance.getBalance()) {
+                            System.err.println("Invalid Value: " + transferringAmount);
+                            continue;
+                        }
+                        System.out.println("Total Balance:" + totalBalance);
+                        cBalance.addBalance((-1)*transferringAmount);
+                        System.out.println("New Customer Balance:" + cBalance.getBalance());
+                        gBalance.addBalance((1)*transferringAmount);
+                        System.out.println("New Gift Card Balance:" + gBalance.getBalance());
+                    } else {
+                        System.out.println("How much would you like to transfer? Gift Card --> Customer Balance");
+                        double transferringAmount = scanner.nextDouble();
+                        if (transferringAmount > gBalance.getBalance()) {
+                            System.err.println("Invalid Value: " + transferringAmount);
+                            continue;
+                        }
+                        System.out.println("Total Balance:" + totalBalance);
+                        cBalance.addBalance((1)*transferringAmount);
+                        System.out.println("New Customer Balance:" + cBalance.getBalance());
+                        gBalance.addBalance((-1)*transferringAmount);
+                        System.out.println("New Gift Card Balance:" + gBalance.getBalance());
+
+                    }
                     break;
                 case 4://add balance
                     CustomerBalance customerBalance = findCustomerBalance(customer.getId());
