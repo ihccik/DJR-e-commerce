@@ -224,7 +224,26 @@ while(true) {
                     else if (userChoice == 4){
                         continue;
                     }
+                    break;
                 case 10:
+                    System.out.println("Enter amount for transferring from your account balance to your gift card balance");
+                    double amountToTransfer = scanner.nextDouble();
+                    customerBalance = findCustomerBalance(customer.getId());
+                    giftCardBalance = findGiftCardBalance(customer.getId());
+                    if (customerBalance.transferAccountBalanceToGiftCardBalance(amountToTransfer, giftCardBalance)){
+                        //updating customer balance and gift card balance in the database
+                        CUSTOMER_BALANCE_LIST.stream().filter(balance -> balance.getCustomerId().equals(customer.getId())).findFirst().get().setBalance(customerBalance.getBalance());
+                        GIFT_CARD_BALANCE_LIST.stream().filter(balance -> balance.getCustomerId().equals(customer.getId())).findFirst().get().setBalance(giftCardBalance.getBalance());
+                        System.out.println("Transfer completed");
+
+                        System.out.println("Customer Balance:" + customerBalance.getBalance());
+                        System.out.println("Gift Card Balance:" + giftCardBalance.getBalance());
+                        continue;
+                    }
+                    else {
+                        System.err.println("An error occurred.");
+                    }
+                case 11:
                     System.exit(1);
                     break;
             }
@@ -362,7 +381,7 @@ while(true) {
 
     private static String[] prepareMenuOptions(){
         return new String[]{"List Categories","List Products","List Discount","See Balance","Add Balance",
-                "Place an order","See Cart","See order details","See your address", "Phone Numbers","Close App"};
+                "Place an order","See Cart","See order details","See your address", "Phone Numbers", "Balance Actions","Close App"};
     }
 
 
