@@ -1,6 +1,9 @@
 package com.company.category;
 
+import javax.swing.text.DateFormatter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class Electronic extends Category{
@@ -10,9 +13,13 @@ public class Electronic extends Category{
     }
 
     @Override
-    public LocalDateTime findDeliveryDueDate() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        return localDateTime.plusDays(4);
+    public String findDeliveryDueDate() {
+
+        LocalDate localDate = LocalDate.now();
+        localDate = localDate.plusDays(4);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        return localDate.format(dtf);
     }
 
     @Override

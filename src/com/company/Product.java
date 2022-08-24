@@ -2,6 +2,7 @@ package com.company;
 
 import com.company.category.Category;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -63,7 +64,7 @@ public class Product {
 
     }
 
-    public LocalDateTime getDeliveryDueDate() throws Exception {
+    public String getDeliveryDueDate() throws Exception {
         for(Category category : StaticConstants.CATEGORY_LIST){
             if(getCategoryId().toString().equals(category.getId().toString())){
                 return category.findDeliveryDueDate();
