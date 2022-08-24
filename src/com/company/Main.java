@@ -9,19 +9,18 @@ import com.company.order.Order;
 import com.company.order.OrderService;
 import com.company.order.OrderServiceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
-import static com.company.StaticConstants.DISCOUNT_LIST;
-import static com.company.StaticConstants.ORDER_LIST;
+import static com.company.StaticConstants.*;
 
 public class Main {
 
-    private static Customer customer;
 
-    public static void main(String[] args) {
+    static {
 
         DataGenerator.createCustomer();
         DataGenerator.createCategory();
@@ -29,15 +28,49 @@ public class Main {
         DataGenerator.createBalance();
         DataGenerator.createDiscount();
 
+    }
+    private static Customer customer;
+    public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
+
 
         System.out.println("Select Customer:");
         for (int i = 0; i < StaticConstants.CUSTOMER_LIST.size(); i++) {
             System.out.println("Type " + i + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
         }
 
-        customer = StaticConstants.CUSTOMER_LIST.get(scanner.nextInt());
+        while(true) {
 
+            System.out.println("Select Customer:");
+
+            System.out.println("Type 0 for creating new customer");
+
+            for (int i = 0; i < StaticConstants.CUSTOMER_LIST.size(); i++) {
+                System.out.println("Type " + (i + 1) + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
+            }
+
+            int costumerChoice = scanner.nextInt();
+
+            customer = null;
+
+            if (costumerChoice == 0) {
+
+
+                createNewCustomer();
+                customer = CUSTOMER_LIST.get(CUSTOMER_LIST.size() - 1);
+                break;
+            }
+
+            try {
+                customer = CUSTOMER_LIST.get(costumerChoice - 1);
+                break;
+
+            } catch (IndexOutOfBoundsException c) {
+                System.err.println("The user doesn't exist. Please, try again.");
+            }
+
+        }
         Cart cart = new Cart(customer);
 
         while (true) {
@@ -51,7 +84,6 @@ public class Main {
             int menuSelection = scanner.nextInt();
 
             switch (menuSelection) {
-
                 case 0: //list categories
                     for (Category category : StaticConstants.CATEGORY_LIST) {
                         System.out.println("Category Code:" + category.generateCategoryCode() + " category name:" + category.getName());
@@ -68,6 +100,7 @@ public class Main {
                     break;
                 case 2: //list discounts
                     for (Discount discount : DISCOUNT_LIST) {
+
                         System.out.println("Discount Name: " + discount.getName() + "discount threshold amount: " + discount.getThresholdAmount());
                     }
                     break;
@@ -251,7 +284,23 @@ public class Main {
 
     }
 
-    private static void printPhoneNumberMenu() {
+    private static void createNewCustomer() {
+
+        Customer newCustomer = new Customer(UUID.randomUUID());
+
+        System.out.println("Please enter the user name:");
+
+        newCustomer.setUserName(new Scanner(System.in).nextLine());
+
+        System.out.println("Please enter your email address:");
+
+        newCustomer.setEmail(new Scanner(System.in).nextLine());
+
+        CUSTOMER_LIST.add(newCustomer);
+    }
+
+    private static void printPhoneNumberMenu(){
+
         listPhoneNumbers();
         System.out.println("1 for Add new phone number");
         System.out.println("2 for Edit a phone number");
