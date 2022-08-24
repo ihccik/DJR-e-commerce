@@ -19,6 +19,7 @@ import static com.company.StaticConstants.*;
 
 public class Main {
 
+
     static {
 
         DataGenerator.createCustomer();
@@ -32,6 +33,12 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+
+
+        System.out.println("Select Customer:");
+        for (int i = 0; i < StaticConstants.CUSTOMER_LIST.size(); i++) {
+            System.out.println("Type " + i + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
+        }
 
         while(true) {
 
@@ -48,6 +55,7 @@ public class Main {
             customer = null;
 
             if (costumerChoice == 0) {
+
 
                 createNewCustomer();
                 customer = CUSTOMER_LIST.get(CUSTOMER_LIST.size() - 1);
@@ -91,7 +99,8 @@ public class Main {
                     }
                     break;
                 case 2: //list discounts
-                    for (Discount discount : StaticConstants.DISCOUNT_LIST) {
+                    for (Discount discount : DISCOUNT_LIST) {
+
                         System.out.println("Discount Name: " + discount.getName() + "discount threshold amount: " + discount.getThresholdAmount());
                     }
                     break;
@@ -207,26 +216,64 @@ public class Main {
                     printAddressByCustomerId(customer);
                     break;
                 case 9:
-                    printPhoneNumberMenu();
-                    int userChoice = scanner.nextInt();
-                    if (userChoice == 1){
-                        System.out.println("Write the phone number to add (only digits)");
-                        customer.getPhoneNumbers().add(scanner.nextLong());
+                    while (true) {
                         printPhoneNumberMenu();
-                        userChoice = scanner.nextInt();
-                        if (userChoice == 4){
-                            continue;
+                        int userChoice = scanner.nextInt();
+                        if (userChoice == 1) {
+                            System.out.println("Write the phone number to add (only digits)");
+                            customer.getPhoneNumbers().add(scanner.nextLong());
+                            //continue;
+
+                        } else if (userChoice == 2) {
+                            //todo @Glenio your ticket for editing an existing number
+                            boolean isNum = true;
+                            int editNumberId = 0;
+                            scanner.nextLine();
+                            while (isNum) {
+
+                                System.out.println("Select phone number that you want to edit, use id number:\n");
+                                listPhoneNumbers();
+
+                                String input = scanner.nextLine();
+                                if (!input.matches("^[0-9]+$")) {
+
+                                    System.err.println("*********** Wrong Input, please try again *************\n");
+                                    continue;
+
+                                } else {
+
+                                    if (Integer.parseInt(input) > (customer.getPhoneNumbers().size() - 1)) {
+                                        System.out.println("Id invalid, please try again:\n");
+                                        continue;
+                                    }
+                                }
+
+                                while (true) {
+                                    System.out.println("Enter new phone number");
+                                    if (!scanner.hasNextInt()) {
+                                        scanner.nextLine();
+                                        System.err.println("*********** Wrong Input, please try again *************\n");
+                                        continue;
+                                    } else {
+                                        Long newPhoneNumber = scanner.nextLong();
+                                        customer.getPhoneNumbers().set(editNumberId, newPhoneNumber);
+                                        isNum = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            System.out.println("Phone " + editNumberId + " has been updated to :" + customer.getPhoneNumbers().get(editNumberId));
+
+                            //continue;
+
+                        } else if (userChoice == 3) {
+                            //todo for deleting a phone number
+                            // continue;
+                        } else if (userChoice == 4) {
+                            break;
                         }
                     }
-                    else if (userChoice == 2){
-                        //todo @Glenio your ticket for editing an existing number
-                    }
-                    else if (userChoice == 3){
-                        //todo for deleting a phone number
-                    }
-                    else if (userChoice == 4){
-                        continue;
-                    }
+                    break;
                 case 10:
                     System.exit(1);
                     break;
@@ -253,6 +300,7 @@ public class Main {
     }
 
     private static void printPhoneNumberMenu(){
+
         listPhoneNumbers();
         System.out.println("1 for Add new phone number");
         System.out.println("2 for Edit a phone number");
@@ -260,11 +308,10 @@ public class Main {
         System.out.println("4 for return to main menu");
     }
 
-    private static void listPhoneNumbers(){
-        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()){
+    private static void listPhoneNumbers() {
+        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()) {
             System.out.println("There is no phone related to your account");
-        }
-        else {
+        } else {
             System.out.println("Phone numbers:");
             for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
                 System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
@@ -311,12 +358,12 @@ public class Main {
 
         Integer cartCount = cart.getProductMap().get(product);
 
-        if(cartCount !=null && product.getRemainingStock() > cartCount+count){
-            cart.getProductMap().put(product,cartCount+count);
+        if (cartCount != null && product.getRemainingStock() > cartCount + count) {
+            cart.getProductMap().put(product, cartCount + count);
             return true;
 
-        }else if(product.getRemainingStock()>=count){
-            cart.getProductMap().put(product,count);
+        } else if (product.getRemainingStock() >= count) {
+            cart.getProductMap().put(product, count);
             return true;
         }
         return false; //BREAK TILL 3:10 PM
@@ -324,7 +371,7 @@ public class Main {
     }
 
     private static Product findProductById(String productId) throws Exception {
-        for(Product product : StaticConstants.PRODUCT_LIST){
+        for (Product product : StaticConstants.PRODUCT_LIST) {
             if (product.getId().toString().equals(productId)) {
                 return product;
             }
@@ -333,41 +380,40 @@ public class Main {
     }
 
 
-    private static CustomerBalance findCustomerBalance(UUID customerId){
-        for(Balance customerBalance : StaticConstants.CUSTOMER_BALANCE_LIST){
-            if(customerBalance.getCustomerId().toString().equals(customerId.toString())){
+    private static CustomerBalance findCustomerBalance(UUID customerId) {
+        for (Balance customerBalance : StaticConstants.CUSTOMER_BALANCE_LIST) {
+            if (customerBalance.getCustomerId().toString().equals(customerId.toString())) {
                 return (CustomerBalance) customerBalance;
             }
         }
 
-        CustomerBalance customerBalance = new CustomerBalance(customerId,0d);
+        CustomerBalance customerBalance = new CustomerBalance(customerId, 0d);
         StaticConstants.CUSTOMER_BALANCE_LIST.add(customerBalance);
 
         return customerBalance;
     }
 
-    private static GiftCardBalance findGiftCardBalance(UUID customerId){
-        for(Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST){
-            if(giftCarBalance.getCustomerId().toString().equals(customerId.toString())){
-                return  (GiftCardBalance) giftCarBalance;
+    private static GiftCardBalance findGiftCardBalance(UUID customerId) {
+        for (Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST) {
+            if (giftCarBalance.getCustomerId().toString().equals(customerId.toString())) {
+                return (GiftCardBalance) giftCarBalance;
             }
         }
 
-        GiftCardBalance giftCarBalance = new GiftCardBalance(customerId,0d);
+        GiftCardBalance giftCarBalance = new GiftCardBalance(customerId, 0d);
         StaticConstants.GIFT_CARD_BALANCE_LIST.add(giftCarBalance);
 
         return giftCarBalance;
     }
 
 
-
-
-
-    private static String[] prepareMenuOptions(){
-        return new String[]{"List Categories","List Products","List Discount","See Balance","Add Balance",
-                "Place an order","See Cart","See order details","See your address", "Phone Numbers","Close App"};
+    private static String[] prepareMenuOptions() {
+        return new String[]{"List Categories", "List Products", "List Discount", "See Balance", "Add Balance",
+                "Place an order", "See Cart", "See order details", "See your address", "Phone Numbers", "Close App"};
     }
 
 
 }
+
+
 // DJR-6 COMMIT
