@@ -105,12 +105,6 @@ public class Main {
                             "Discount Name: " + discount.getName() + "discount threshold amount: "
                                 + discount.getThresholdAmount());
                         }
-                    } 
-                    break;
-                case 2: //list discounts
-                    for (Discount discount : DISCOUNT_LIST) {
-                        System.out.println("Discount Name: " + discount.getName() + "discount threshold amount: " + discount.getThresholdAmount());
-                    }
                     break;
                 case 3://see balance
                     CustomerBalance cBalance = findCustomerBalance(customer.getId());
@@ -426,26 +420,6 @@ public class Main {
         CUSTOMER_LIST.add(newCustomer);
     }
 
-    private static void printPhoneNumberMenu(){
-
-        listPhoneNumbers();
-        System.out.println("1 for Add new phone number");
-        System.out.println("2 for Edit a phone number");
-        System.out.println("3 for Delete a phone number");
-        System.out.println("4 for return to main menu");
-    }
-
-    private static void listPhoneNumbers() {
-        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()) {
-            System.out.println("There is no phone related to your account");
-        } else {
-            System.out.println("Phone numbers:");
-            for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
-                System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
-            }
-        }
-    }
-
     private static Discount findDiscountById(String discountId) throws Exception {
         for (Discount discount : DISCOUNT_LIST) {
             if (discount.getId().toString().equals(discountId)) {
@@ -538,26 +512,6 @@ public class Main {
             "See Balance", "Add Balance",
             "Place an order", "See Cart", "See order details", "See your address",
             "Phone Numbers", "Transfer Gift Card", "Close App"};
-    }
-
-    private static void createNewCustomer() {
-
-        Customer newCustomer = new Customer(UUID.randomUUID());
-
-        System.out.println("Please enter the user name:");
-
-        newCustomer.setUserName(new Scanner(System.in).nextLine());
-
-        System.out.println("Please enter your email address:");
-        
-        newCustomer.setEmail(new Scanner(System.in).nextLine());
-
-        CUSTOMER_LIST.add(newCustomer);
-    }
-
-    private static String[] prepareMenuOptions() {
-        return new String[]{"List Categories", "List Products", "List Discount", "See Balance", "Add Balance",
-                "Place an order", "See Cart", "See order details", "See your address", "Phone Numbers", "Close App"};
     }
     
 }
