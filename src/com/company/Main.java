@@ -9,6 +9,7 @@ import com.company.order.Order;
 import com.company.order.OrderService;
 import com.company.order.OrderServiceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -41,9 +42,7 @@ public class Main {
             System.out.println("Type 0 for creating new customer");
 
             for (int i = 0; i < StaticConstants.CUSTOMER_LIST.size(); i++) {
-                System.out.println(
-                    "Type " + (i + 1) + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i)
-                        .getUserName());
+                System.out.println("Type " + (i + 1) + " for customer:" + StaticConstants.CUSTOMER_LIST.get(i).getUserName());
             }
 
             int costumerChoice = scanner.nextInt();
@@ -51,6 +50,7 @@ public class Main {
             customer = null;
 
             if (costumerChoice == 0) {
+
 
                 createNewCustomer();
                 customer = CUSTOMER_LIST.get(CUSTOMER_LIST.size() - 1);
@@ -104,6 +104,12 @@ public class Main {
                         System.out.println(
                             "Discount Name: " + discount.getName() + "discount threshold amount: "
                                 + discount.getThresholdAmount());
+                        }
+                    } 
+                    break;
+                case 2: //list discounts
+                    for (Discount discount : DISCOUNT_LIST) {
+                        System.out.println("Discount Name: " + discount.getName() + "discount threshold amount: " + discount.getThresholdAmount());
                     }
                     break;
                 case 3://see balance
@@ -113,6 +119,41 @@ public class Main {
                     System.out.println("Total Balance:" + totalBalance);
                     System.out.println("Customer Balance:" + cBalance.getBalance());
                     System.out.println("Gift Card Balance:" + gBalance.getBalance());
+                    System.out.println("Would you like to transfer between your balances?");
+                    System.out.println("Type 0 for NO");
+                    System.out.println("Type 1 for transferring from Customer Balance to Gift Card Balance");
+                    System.out.println("Type 2 for transferring from Gift Card Balance to Customer Balance");
+
+                    int selection = scanner.nextInt();
+
+                    if (selection == 0) {
+                        continue;
+                    } else if (selection == 1) {
+                        System.out.println("How much would you like to transfer? Customer Balance --> Gift Card");
+                        double transferringAmount = scanner.nextDouble();
+                        if (transferringAmount > cBalance.getBalance()) {
+                            System.err.println("Invalid Value: " + transferringAmount);
+                            System.exit(0);
+                        }
+                        System.out.println("Total Balance:" + totalBalance);
+                        cBalance.addBalance((-1)*transferringAmount);
+                        System.out.println("New Customer Balance:" + cBalance.getBalance());
+                        gBalance.addBalance((1)*transferringAmount);
+                        System.out.println("New Gift Card Balance:" + gBalance.getBalance());
+                    } else {
+                        System.out.println("How much would you like to transfer? Gift Card --> Customer Balance");
+                        double transferringAmount = scanner.nextDouble();
+                        if (transferringAmount > gBalance.getBalance()) {
+                            System.err.println("Invalid Value: " + transferringAmount);
+                            System.exit(0);
+                        }
+                        System.out.println("Total Balance:" + totalBalance);
+                        cBalance.addBalance((1)*transferringAmount);
+                        System.out.println("New Customer Balance:" + cBalance.getBalance());
+                        gBalance.addBalance((-1)*transferringAmount);
+                        System.out.println("New Gift Card Balance:" + gBalance.getBalance());
+
+                    }
                     break;
                 case 4://add balance
                     CustomerBalance customerBalance = findCustomerBalance(customer.getId());
@@ -241,21 +282,20 @@ public class Main {
                             scanner.nextLine();
                             while (isNum) {
 
-                                System.out.println(
-                                    "Select phone number that you want to edit, use id number:\n");
+                                System.out.println("Select phone number that you want to edit, use id number:\n");
+
                                 listPhoneNumbers();
 
                                 String input = scanner.nextLine();
                                 if (!input.matches("^[0-9]+$")) {
 
-                                    System.err.println(
-                                        "*********** Wrong Input, please try again *************\n");
+                                    System.err.println("*********** Wrong Input, please try again *************\n");
+
                                     continue;
 
                                 } else {
 
-                                    if (Integer.parseInt(input) > (customer.getPhoneNumbers().size()
-                                        - 1)) {
+                                    if (Integer.parseInt(input) > (customer.getPhoneNumbers().size() - 1)) {
                                         System.out.println("Id invalid, please try again:\n");
                                         continue;
                                     }
@@ -272,13 +312,15 @@ public class Main {
                                         Long newPhoneNumber = scanner.nextLong();
                                         customer.getPhoneNumbers()
                                             .set(editNumberId, newPhoneNumber);
-                                        isNum = false;
+                                            
+                                            isNum = false;
                                         break;
-                                    }
+
+                                    } 
                                 }
                             }
-                            System.out.println("Phone " + editNumberId + " has been updated to :"
-                                + customer.getPhoneNumbers().get(editNumberId));
+
+                            System.out.println("Phone " + editNumberId + " has been updated to :" + customer.getPhoneNumbers().get(editNumberId));
 
                             //continue;
 
@@ -288,7 +330,6 @@ public class Main {
                         } else if (userChoice == 4) {
                             break;
                         }
-
                     }
                     break;
                 case 10:
@@ -370,7 +411,42 @@ public class Main {
         }
     }
 
-    private static Discount findDiscountById (String discountId) throws Exception {
+    private static void createNewCustomer() {
+
+        Customer newCustomer = new Customer(UUID.randomUUID());
+
+        System.out.println("Please enter the user name:");
+
+        newCustomer.setUserName(new Scanner(System.in).nextLine());
+
+        System.out.println("Please enter your email address:");
+
+        newCustomer.setEmail(new Scanner(System.in).nextLine());
+
+        CUSTOMER_LIST.add(newCustomer);
+    }
+
+    private static void printPhoneNumberMenu(){
+
+        listPhoneNumbers();
+        System.out.println("1 for Add new phone number");
+        System.out.println("2 for Edit a phone number");
+        System.out.println("3 for Delete a phone number");
+        System.out.println("4 for return to main menu");
+    }
+
+    private static void listPhoneNumbers() {
+        if (customer.getPhoneNumbers() == null || customer.getPhoneNumbers().isEmpty()) {
+            System.out.println("There is no phone related to your account");
+        } else {
+            System.out.println("Phone numbers:");
+            for (int i = 0; i < customer.getPhoneNumbers().size(); i++) {
+                System.out.println("(id:" + i + ")   " + customer.getPhoneNumbers().get(i));
+            }
+        }
+    }
+
+    private static Discount findDiscountById(String discountId) throws Exception {
         for (Discount discount : DISCOUNT_LIST) {
             if (discount.getId().toString().equals(discountId)) {
                 return discount;
@@ -422,7 +498,7 @@ public class Main {
         return false;
     }
 
-    private static Product findProductById (String productId) throws Exception {
+    private static Product findProductById(String productId) throws Exception {
         for (Product product : StaticConstants.PRODUCT_LIST) {
             if (product.getId().toString().equals(productId)) {
                 return product;
@@ -431,7 +507,7 @@ public class Main {
         throw new Exception("Product not found");
     }
 
-    private static CustomerBalance findCustomerBalance (UUID customerId){
+    private static CustomerBalance findCustomerBalance(UUID customerId) {
         for (Balance customerBalance : StaticConstants.CUSTOMER_BALANCE_LIST) {
             if (customerBalance.getCustomerId().toString().equals(customerId.toString())) {
                 return (CustomerBalance) customerBalance;
@@ -444,7 +520,7 @@ public class Main {
         return customerBalance;
     }
 
-    private static GiftCardBalance findGiftCardBalance (UUID customerId){
+    private static GiftCardBalance findGiftCardBalance(UUID customerId) {
         for (Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST) {
             if (giftCarBalance.getCustomerId().toString().equals(customerId.toString())) {
                 return (GiftCardBalance) giftCarBalance;
@@ -473,9 +549,15 @@ public class Main {
         newCustomer.setUserName(new Scanner(System.in).nextLine());
 
         System.out.println("Please enter your email address:");
-
+        
         newCustomer.setEmail(new Scanner(System.in).nextLine());
 
         CUSTOMER_LIST.add(newCustomer);
     }
+
+    private static String[] prepareMenuOptions() {
+        return new String[]{"List Categories", "List Products", "List Discount", "See Balance", "Add Balance",
+                "Place an order", "See Cart", "See order details", "See your address", "Phone Numbers", "Close App"};
+    }
+    
 }
