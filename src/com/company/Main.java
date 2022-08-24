@@ -104,7 +104,7 @@ public class Main {
                         System.out.println(
                             "Discount Name: " + discount.getName() + "discount threshold amount: "
                                 + discount.getThresholdAmount());
-                        }
+                    }
                     break;
                 case 3://see balance
                     CustomerBalance cBalance = findCustomerBalance(customer.getId());
@@ -306,11 +306,11 @@ public class Main {
                                         Long newPhoneNumber = scanner.nextLong();
                                         customer.getPhoneNumbers()
                                             .set(editNumberId, newPhoneNumber);
-                                            
-                                            isNum = false;
+
+                                        isNum = false;
                                         break;
 
-                                    } 
+                                    }
                                 }
                             }
 
@@ -513,5 +513,5 @@ public class Main {
             "Place an order", "See Cart", "See order details", "See your address",
             "Phone Numbers", "Transfer Gift Card", "Close App"};
     }
-    
+
 }
