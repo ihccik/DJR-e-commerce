@@ -281,8 +281,16 @@ public class Main {
                                 + customer.getPhoneNumbers().get(editNumberId));
 
                             //continue;
+
+                        } else if (userChoice == 3) {
+                            //todo for deleting a phone number
+                            // continue;
+                        } else if (userChoice == 4) {
+                            break;
                         }
+
                     }
+                    break;
                 case 10:
                     transferGiftCard(customer.getId());
                     break;
