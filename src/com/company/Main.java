@@ -89,9 +89,7 @@ public class Main {
                 case 1: //list products  //product name, product category name
                     try {
                         for (Product product : StaticConstants.PRODUCT_LIST) {
-                            System.out.println(
-                                "Product Name:" + product.getName() + "Product Category Name:"
-                                    + product.getCategoryName());
+                            System.out.println("Product Name: " + "\n" + product.getName() + "\n" + "Product Category Name:" + "\n" + product.getCategoryName());
                         }
                     } catch (Exception e) {
                         System.out.println(
@@ -104,7 +102,7 @@ public class Main {
                         System.out.println(
                             "Discount Name: " + discount.getName() + "discount threshold amount: "
                                 + discount.getThresholdAmount());
-                        }
+                    }
                     break;
                 case 3://see balance
                     CustomerBalance cBalance = findCustomerBalance(customer.getId());
@@ -306,11 +304,11 @@ public class Main {
                                         Long newPhoneNumber = scanner.nextLong();
                                         customer.getPhoneNumbers()
                                             .set(editNumberId, newPhoneNumber);
-                                            
-                                            isNum = false;
+
+                                        isNum = false;
                                         break;
 
-                                    } 
+                                    }
                                 }
                             }
 
@@ -513,5 +511,5 @@ public class Main {
             "Place an order", "See Cart", "See order details", "See your address",
             "Phone Numbers", "Transfer Gift Card", "Close App"};
     }
-    
+
 }
