@@ -26,7 +26,4 @@ public abstract class Balance {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
-
-
-
 }
