@@ -193,10 +193,10 @@ public class Main {
                         for (Product product : StaticConstants.PRODUCT_LIST) {
                             try {
                                 System.out.println(
-                                    "id:" + product.getId() + "price:" + product.getPrice() +
-                                        "product category" + product.getCategoryName() +
-                                        "stock:" + product.getRemainingStock() +
-                                        "product delivery due:" + product.getDeliveryDueDate());
+                                    "id: " + product.getId() + " price:" + product.getPrice() +
+                                        " product category " + product.getCategoryName() +
+                                        " stock: " + product.getRemainingStock() +
+                                        " product delivery due: " + product.getDeliveryDueDate());
                             } catch (Exception e) {
                                 System.out.println(e.getMessage());
                                 ;
@@ -489,13 +489,11 @@ public class Main {
         return false;
     }
 
-    private static Product findProductById(String productId) throws Exception {
-        for (Product product : StaticConstants.PRODUCT_LIST) {
-            if (product.getId().toString().equals(productId)) {
-                return product;
-            }
-        }
-        throw new Exception("Product not found");
+    private static Product findProductById(String productId) {
+
+        return PRODUCT_LIST.stream()
+                .filter(product -> product.getId().equals(UUID.fromString(productId)))
+                .findFirst().orElseThrow();
     }
 
     private static CustomerBalance findCustomerBalance(UUID customerId) {
