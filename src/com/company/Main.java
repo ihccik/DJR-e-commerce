@@ -85,6 +85,7 @@ public class Main {
                             "Category Code:" + category.generateCategoryCode() + " category name:"
                                 + category.getName());
                     }
+                    returnToMenu();
                     break;
                 case 1: //list products  //product name, product category name
                     try {
@@ -96,6 +97,7 @@ public class Main {
                             "Product could not printed because category not found for product name:"
                                 + e.getMessage().split(",")[1]);
                     }
+                    returnToMenu();
                     break;
                 case 2: //list discounts
                     for (Discount discount : StaticConstants.DISCOUNT_LIST) {
@@ -103,6 +105,7 @@ public class Main {
                             "Discount Name: " + discount.getName() + "discount threshold amount: "
                                 + discount.getThresholdAmount());
                     }
+                    returnToMenu();
                     break;
                 case 3://see balance
                     CustomerBalance cBalance = findCustomerBalance(customer.getId());
@@ -146,6 +149,7 @@ public class Main {
                         System.out.println("New Gift Card Balance:" + gBalance.getBalance());
 
                     }
+                    returnToMenu();
                     break;
                 case 4://add balance
                     CustomerBalance customerBalance = findCustomerBalance(customer.getId());
@@ -171,6 +175,7 @@ public class Main {
                                 "New Gift Card Balance:" + giftCardBalance.getBalance());
                             break;
                     }
+                    returnToMenu();
                     break;
                 case 5://place an order
                     Map<Product, Integer> map = new HashMap<>();
@@ -240,6 +245,7 @@ public class Main {
                     } else {
                         System.out.println(result);
                     }
+                    returnToMenu();
                     break;
                 case 6://See cart
                     System.out.println("Your Cart");
@@ -251,12 +257,15 @@ public class Main {
                     } else {
                         System.out.println("Your cart is empty");
                     }
+                    returnToMenu();
                     break;
                 case 7://see order details
                     printOrdersByCustomerId(customer.getId());
+                    returnToMenu();
                     break;
                 case 8://see your address
                     printAddressByCustomerId(customer);
+                    returnToMenu();
                     break;
                 case 9:
                     while (true) {
@@ -326,6 +335,7 @@ public class Main {
                     break;
                 case 10:
                     transferGiftCard(customer.getId());
+                    returnToMenu();
                     break;
                 case 11:
                     System.exit(1);
@@ -336,39 +346,41 @@ public class Main {
     }
 
     private static void transferGiftCard (UUID id){
-        GiftCardBalance gBalance = findGiftCardBalance(id);
-        System.out.println("Gift Card Balance:" + gBalance.getBalance());
+        while (true) {
+            GiftCardBalance gBalance = findGiftCardBalance(id);
+            System.out.println("Gift Card Balance:" + gBalance.getBalance());
 
-        if (gBalance.getBalance() == 0) {
-            System.out.println("Sorry. You don`t have any balance in your account. ");
-            System.exit(0); // how to go back to options menu?
-        }
-        Scanner scanner = new Scanner(System.in);
+            if (gBalance.getBalance() == 0) {
+                System.out.println("Sorry. You don`t have any balance in your account. ");
+                break;//System.exit(0); // how to go back to options menu?
+            }
+            Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Please enter the amount to be transferred");
-        double transferAmount = scanner.nextDouble();
-
-        while (transferAmount > gBalance.getBalance()) {
-            System.out.println(
-                "You don`t have enough balance. Please enter less than your gift card balance:"
-                    + gBalance.getBalance());
             System.out.println("Please enter the amount to be transferred");
-            transferAmount = scanner.nextDouble();
+            double transferAmount = scanner.nextDouble();
 
+            while (transferAmount > gBalance.getBalance()) {
+                System.out.println(
+                        "You don`t have enough balance. Please enter less than your gift card balance:"
+                                + gBalance.getBalance());
+                System.out.println("Please enter the amount to be transferred");
+                transferAmount = scanner.nextDouble();
+
+            }
+
+            System.out.println(StaticConstants.CUSTOMER_LIST.stream()
+                    .collect(Collectors.toMap(Customer::getUserName, Customer::getId)));
+
+            System.out.println("Please enter the User ID of the target user");
+            UUID targetId = UUID.fromString(scanner.next());
+
+            System.out.println(targetId);
+
+            addGiftCardBalance(targetId, transferAmount);
+
+            gBalance.setBalance(gBalance.getBalance() - transferAmount);
+            System.out.println("Your new gift card balance:" + gBalance.getBalance());
         }
-
-        System.out.println(StaticConstants.CUSTOMER_LIST.stream()
-            .collect(Collectors.toMap(Customer::getUserName, Customer::getId)));
-
-        System.out.println("Please enter the User ID of the target user");
-        UUID targetId = UUID.fromString(scanner.next());
-
-        System.out.println(targetId);
-
-        addGiftCardBalance(targetId, transferAmount);
-
-        gBalance.setBalance(gBalance.getBalance() - transferAmount);
-        System.out.println("Your new gift card balance:" + gBalance.getBalance());
     }
 
     private static void addGiftCardBalance (UUID targetId,double transferAmount){
@@ -510,6 +522,17 @@ public class Main {
             "See Balance", "Add Balance",
             "Place an order", "See Cart", "See order details", "See your address",
             "Phone Numbers", "Transfer Gift Card", "Close App"};
+    }
+
+    private static void returnToMenu() {
+
+        System.out.println("0 - Back");
+
+        int n = 1;
+
+        while (n != 0){
+            n = new Scanner(System.in).nextInt();
+        }
     }
 
 }
