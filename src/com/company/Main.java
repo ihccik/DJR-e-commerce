@@ -474,12 +474,10 @@ public class Main {
     }
 
     private static Product findProductById(String productId) throws Exception {
-        for (Product product : StaticConstants.PRODUCT_LIST) {
-            if (product.getId().toString().equals(productId)) {
-                return product;
-            }
-        }
-        throw new Exception("Product not found");
+        return PRODUCT_LIST.stream()
+                .filter( product -> product.getId().equals( UUID.fromString( productId ) ) )
+                .findFirst()
+                .orElseThrow();
     }
 
     private static CustomerBalance findCustomerBalance(UUID customerId) {
