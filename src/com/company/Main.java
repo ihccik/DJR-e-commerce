@@ -5,6 +5,7 @@ import com.company.balance.CustomerBalance;
 import com.company.balance.GiftCardBalance;
 import com.company.category.Category;
 import com.company.discount.Discount;
+import com.company.enums.Menus;
 import com.company.order.Order;
 import com.company.order.OrderService;
 import com.company.order.OrderServiceImpl;
@@ -17,6 +18,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.company.StaticConstants.*;
+import static com.company.enums.Menus.LIST_CATEGORIES;
+import static com.company.enums.Menus.values;
 
 public class Main {
 
@@ -72,14 +75,14 @@ public class Main {
 
             System.out.println("What would you like to do? Just type id for selection");
 
-            for (int i = 0; i < prepareMenuOptions().length; i++) {
-                System.out.println(i + "-" + prepareMenuOptions()[i]);
+            for (int i = 0; i < values().length; i++) {
+                System.out.println(i + " - " + values()[i].toString().replace("_", " "));
             }
 
-            int menuSelection = scanner.nextInt();
+            Menus menuSelection = Menus.values()[scanner.nextInt()];
 
             switch (menuSelection) {
-                case 0: //list categories
+                case LIST_CATEGORIES: //list categories
                     for (Category category : StaticConstants.CATEGORY_LIST) {
                         System.out.println(
                             "Category Code:" + category.generateCategoryCode() + " category name:"
@@ -87,7 +90,7 @@ public class Main {
                     }
                     returnToMenu();
                     break;
-                case 1: //list products  //product name, product category name
+                case LIST_PRODUCTS: //list products  //product name, product category name
                     try {
                         for (Product product : StaticConstants.PRODUCT_LIST) {
                             System.out.println("Product Name: " + "\n" + product.getName() + "\n" + "Product Category Name:" + "\n" + product.getCategoryName());
@@ -99,7 +102,7 @@ public class Main {
                     }
                     returnToMenu();
                     break;
-                case 2: //list discounts
+                case LIST_DISCOUNTS: //list discounts
                     for (Discount discount : StaticConstants.DISCOUNT_LIST) {
                         System.out.println(
                             "Discount Name: " + discount.getName() + "discount threshold amount: "
@@ -107,7 +110,7 @@ public class Main {
                     }
                     returnToMenu();
                     break;
-                case 3://see balance
+                case SEE_BALANCE://see balance
                     CustomerBalance cBalance = findCustomerBalance(customer.getId());
                     GiftCardBalance gBalance = findGiftCardBalance(customer.getId());
                     double totalBalance = cBalance.getBalance() + gBalance.getBalance();
@@ -151,7 +154,7 @@ public class Main {
                     }
                     returnToMenu();
                     break;
-                case 4://add balance
+                case ADD_BALANCE://add balance
                     CustomerBalance customerBalance = findCustomerBalance(customer.getId());
                     GiftCardBalance giftCardBalance = findGiftCardBalance(customer.getId());
                     System.out.println("Which Account would you like to add?");
@@ -165,19 +168,23 @@ public class Main {
 
                     switch (balanceAccountSelection) {
                         case 1:
+                        {
                             customerBalance.addBalance(additionalAmount);
                             System.out.println(
-                                "New Customer Balance:" + customerBalance.getBalance());
-                            break;
+                                    "New Customer Balance:" + customerBalance.getBalance());
+                        }
+                        break;
                         case 2:
+                        {
                             giftCardBalance.addBalance(additionalAmount);
                             System.out.println(
-                                "New Gift Card Balance:" + giftCardBalance.getBalance());
-                            break;
+                                    "New Gift Card Balance:" + giftCardBalance.getBalance());
+                        }
+                        break;
                     }
                     returnToMenu();
                     break;
-                case 5://place an order
+                case PLACE_AN_ORDER://place an order
                     Map<Product, Integer> map = new HashMap<>();
                     cart.setProductMap(map);
                     while (true) {
@@ -247,7 +254,7 @@ public class Main {
                     }
                     returnToMenu();
                     break;
-                case 6://See cart
+                case SEE_CART://See cart
                     System.out.println("Your Cart");
                     if (!cart.getProductMap().keySet().isEmpty()) {
                         for (Product product : cart.getProductMap().keySet()) {
@@ -259,15 +266,15 @@ public class Main {
                     }
                     returnToMenu();
                     break;
-                case 7://see order details
+                case SEE_ORDER_DETAILS://see order details
                     printOrdersByCustomerId(customer.getId());
                     returnToMenu();
                     break;
-                case 8://see your address
+                case SEE_YOUR_ADDRESS://see your address
                     printAddressByCustomerId(customer);
                     returnToMenu();
                     break;
-                case 9:
+                case PHONE_NUMBERS:
                     while (true) {
                         printPhoneNumberMenu();
                         int userChoice = scanner.nextInt();
@@ -333,11 +340,11 @@ public class Main {
                         }
                     }
                     break;
-                case 10:
+                case TRANSFER_GIFT_CARD:
                     transferGiftCard(customer.getId());
                     returnToMenu();
                     break;
-                case 11:
+                case Close_App:
                     System.exit(1);
                     break;
 
