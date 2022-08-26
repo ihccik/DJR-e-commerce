@@ -151,6 +151,7 @@ public class Main {
                 case 4://add balance
                     addBalance();
                     break;
+
                 case 5://place an order
                     Map<Product, Integer> map = new HashMap<>();
                     cart.setProductMap(map);
