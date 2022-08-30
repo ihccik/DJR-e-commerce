@@ -119,12 +119,7 @@ public class Main {
                         System.out.println(
                                 "Which product you want to add to your cart. For exit product selection Type : exit");
                         //no need for ForEach, since we have all products printed with forEach in method
-                        try {
                             Product.listProducts();
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-
                     String productId = scanner.next();
 
                             try {
