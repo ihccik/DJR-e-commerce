@@ -2,8 +2,7 @@ package com.company;
 
 import com.company.category.Category;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.sound.midi.Soundbank;
 import java.util.UUID;
 
 public class Product {
@@ -23,7 +22,6 @@ public class Product {
         this.remainingStock = remainingStock;
         this.categoryId = categoryId;
     }
-
 
 
     public UUID getId() {
@@ -49,14 +47,15 @@ public class Product {
     public void setRemainingStock(Integer remainingStock) {
         this.remainingStock = remainingStock;
     }
+
     public UUID getCategoryId() {
         return categoryId;
     }
 
     public String getCategoryName() throws Exception {
 
-        for(Category category : StaticConstants.CATEGORY_LIST){
-            if(getCategoryId().toString().equals(category.getId().toString())){
+        for (Category category : StaticConstants.CATEGORY_LIST) {
+            if (getCategoryId().toString().equals(category.getId().toString())) {
                 return category.getName();
             }
         }
@@ -64,14 +63,47 @@ public class Product {
 
     }
 
-    public String getDeliveryDueDate() throws Exception {
-        for(Category category : StaticConstants.CATEGORY_LIST){
-            if(getCategoryId().toString().equals(category.getId().toString())){
+    /*public String getDeliveryDueDate() throws Exception {
+        for (Category category : StaticConstants.CATEGORY_LIST) {
+            if (getCategoryId().toString().equals(category.getId().toString())) {
                 return category.findDeliveryDueDate();
             }
         }
         throw new Exception("Category could not find");
+    }*/
+    public Object getDeliveryDueDate()  {
+
+        try {
+            for (Category category : StaticConstants.CATEGORY_LIST) {
+                if (getCategoryId().toString().equals(category.getId().toString())) {
+                    return category.findDeliveryDueDate();
+                }
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return "Category not found";
     }
+
+    @Override
+    public String toString() {
+
+            return "Product name: " + name +"\n"+
+                    "id: " + id +"\n"+
+                    "price: " + price +"\n"+
+                    "stock: " + stock +"\n"+
+                    "remainingStock: " + remainingStock +"\n"+
+                    "categoryId: " + categoryId +"\n"+
+                    "delivery ETA: "+getDeliveryDueDate()+"\n";
+    }
+
+    public static void listProducts() {
+        StaticConstants.PRODUCT_LIST.forEach(System.out::println);
+    }
+
+
+
+
 }
 
 
