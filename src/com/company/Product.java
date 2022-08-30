@@ -3,6 +3,7 @@ package com.company;
 import com.company.category.Category;
 
 import javax.sound.midi.Soundbank;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class Product {
@@ -72,17 +73,16 @@ public class Product {
         throw new Exception("Category could not find");
     }*/
     public Object getDeliveryDueDate()  {
+            try {
+                return StaticConstants.CATEGORY_LIST.stream()
+                        .filter(category -> categoryId.equals(category.getId()))
+                        .findFirst()
+                        .orElseThrow()
+                        .findDeliveryDueDate();
+            }catch (NoSuchElementException e){
 
-        try {
-            for (Category category : StaticConstants.CATEGORY_LIST) {
-                if (getCategoryId().toString().equals(category.getId().toString())) {
-                    return category.findDeliveryDueDate();
-                }
+                return e.getMessage();
             }
-        } catch (Exception e) {
-            e.getMessage();
-        }
-        return "Category not found";
     }
 
     @Override
