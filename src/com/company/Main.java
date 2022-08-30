@@ -83,8 +83,8 @@ public class Main {
                 case 0: //list categories
                     for (Category category : StaticConstants.CATEGORY_LIST) {
                         System.out.println(
-                            "Category Code:" + category.generateCategoryCode() + " category name:"
-                                + category.getName());
+                                "Category Code:" + category.generateCategoryCode() + " category name:"
+                                        + category.getName());
                     }
                     break;
                 case 1: //list products  //product name, product category name
@@ -94,15 +94,15 @@ public class Main {
                         }
                     } catch (Exception e) {
                         System.out.println(
-                            "Product could not printed because category not found for product name:"
-                                + e.getMessage().split(",")[1]);
+                                "Product could not printed because category not found for product name:"
+                                        + e.getMessage().split(",")[1]);
                     }
                     break;
                 case 2: //list discounts
                     for (Discount discount : StaticConstants.DISCOUNT_LIST) {
                         System.out.println(
-                            "Discount Name: " + discount.getName() + "discount threshold amount: "
-                                + discount.getThresholdAmount());
+                                "Discount Name: " + discount.getName() + "discount threshold amount: "
+                                        + discount.getThresholdAmount());
                     }
                     break;
                 case 3://see balance
@@ -117,72 +117,66 @@ public class Main {
                     cart.setProductMap(map);
                     while (true) {
                         System.out.println(
-                            "Which product you want to add to your cart. For exit product selection Type : exit");
-                        for (Product product : StaticConstants.PRODUCT_LIST) {
-                            try {
-                                System.out.println(
-                                        "product name: "+ product.getName()+ "\n"+"\n"+
-                                         "id: " + product.getId()+ "\n" + "\n"+
-                                         "price: " + product.getPrice() +"\n"+ "\n"+
-                                         "product category: " + product.getCategoryName() + "\n"+ "\n"+
-                                         "stock: " + product.getRemainingStock() + "\n"+ "\n"+
-                                         "product delivery due: " + product.getDeliveryDueDate()+ "\n");
-                            } catch (Exception e) {
-                                System.out.println(e.getMessage());
-                                ;
-                            }
-                        }
-                        String productId = scanner.next();
-
+                                "Which product you want to add to your cart. For exit product selection Type : exit");
+                        //no need for ForEach, since we have all products printed with forEach in method
                         try {
-                            Product product = findProductById(productId);
-                            if (!putItemToCartIfStockAvailable(cart, product)) {
-                                System.out.println("Stock is insufficient. Please try again");
-                                continue;
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Product does not exist. please try again");
-                            continue;
-                        }
-
-                        System.out.println(
-                            "Do you want to add more product. Type Y for adding more, N for exit");
-                        String decision = scanner.next();
-                        if (!decision.equals("Y")) {
-                            break;
-                        }
-                    }
-
-                    System.out.println(
-                        "seems there are discount options. Do you want to see and apply to your cart if it is applicable. For no discount type no");
-                    for (Discount discount : DISCOUNT_LIST) {
-                        System.out.println("discount id " + discount.getId() + " discount name: "
-                            + discount.getName());
-                    }
-                    String discountId = scanner.next();
-                    if (!discountId.equals("no")) {
-                        try {
-                            Discount discount = findDiscountById(discountId);
-                            if (discount.decideDiscountIsApplicableToCart(cart)) {
-                                cart.setDiscountId(discount.getId());
-                            }
+                            Product.listProducts();
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                         }
 
-                    }
+                    String productId = scanner.next();
 
-                    OrderService orderService = new OrderServiceImpl();
-                    String result = orderService.placeOrder(cart);
-                    if (result.equals("Order has been placed successfully")) {
-                        System.out.println("Order is successful");
-                        updateProductStock(cart.getProductMap());
-                        cart.setProductMap(new HashMap<>());
-                        cart.setDiscountId(null);
-                    } else {
-                        System.out.println(result);
+                            try {
+                                Product product = findProductById(productId);
+                                if (!putItemToCartIfStockAvailable(cart, product)) {
+                                    System.out.println("Stock is insufficient. Please try again");
+                                    continue;
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Product does not exist. please try again");
+                                continue;
+                            }
+
+                            System.out.println(
+                                    "Do you want to add more product. Type Y for adding more, N for exit");
+                            String decision = scanner.next();
+                            if (!decision.equals("Y")) {
+                                break;
+                            }
+
+            }// end of while
+
+            System.out.println(
+                    "seems there are discount options. Do you want to see and apply to your cart if it is applicable. For no discount type no");
+            for (Discount discount : DISCOUNT_LIST) {
+                System.out.println("discount id " + discount.getId() + " discount name: "
+                        + discount.getName());
+            }
+            String discountId = scanner.next();
+            if (!discountId.equals("no")) {
+                try {
+                    Discount discount = findDiscountById(discountId);
+                    if (discount.decideDiscountIsApplicableToCart(cart)) {
+                        cart.setDiscountId(discount.getId());
                     }
-                    break;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+
+            OrderService orderService = new OrderServiceImpl();
+            String result = orderService.placeOrder(cart);
+            if (result.equals("Order has been placed successfully")) {
+                System.out.println("Order is successful");
+                updateProductStock(cart.getProductMap());
+                cart.setProductMap(new HashMap<>());
+                cart.setDiscountId(null);
+            } else {
+                System.out.println(result);
+            }
+            break;
                 case 6://See cart
                     System.out.println("Your Cart");
                     if (!cart.getProductMap().keySet().isEmpty()) {
