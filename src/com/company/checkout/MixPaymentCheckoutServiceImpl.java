@@ -6,7 +6,9 @@ import com.company.balance.Balance;
 import com.company.balance.CustomerBalance;
 import com.company.balance.GiftCardBalance;
 
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.company.StaticConstants.CUSTOMER_BALANCE_LIST;
 import static com.company.StaticConstants.GIFT_CARD_BALANCE_LIST;
@@ -19,6 +21,7 @@ public class MixPaymentCheckoutServiceImpl implements CheckoutService{
 
             // 300 giftcard balance
             // 450 customer balance
+
             // 600 cart
 
             // 300 - 600 = -300
@@ -44,18 +47,28 @@ public class MixPaymentCheckoutServiceImpl implements CheckoutService{
 
         return false;
     }
-    private static GiftCardBalance findGiftCardBalance(UUID customerId){
-        for(Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST){
+    private static GiftCardBalance findGiftCardBalance(UUID customerId) {
+       /* for(Balance giftCarBalance : StaticConstants.GIFT_CARD_BALANCE_LIST){
             if(giftCarBalance.getCustomerId().toString().equals(customerId.toString())){
                 return  (GiftCardBalance) giftCarBalance;
             }
         }
+       */
+        Optional<Balance> balanceOptional = GIFT_CARD_BALANCE_LIST.stream()
+                .filter(balance -> balance.getCustomerId().toString().equals(customerId.toString()))
+                .findFirst();
+        if (balanceOptional.isPresent())
+            return (GiftCardBalance) balanceOptional.get();
+        else {
+            GiftCardBalance giftCarBalance = new GiftCardBalance(customerId, 0d);
+            StaticConstants.GIFT_CARD_BALANCE_LIST.add(giftCarBalance);
 
-        GiftCardBalance giftCarBalance = new GiftCardBalance(customerId,0d);
-        StaticConstants.GIFT_CARD_BALANCE_LIST.add(giftCarBalance);
+            return giftCarBalance;
+        }
 
-        return giftCarBalance;
+
     }
+
 
     private static CustomerBalance findCustomerBalance(UUID customerId){
         for(Balance customerBalance : StaticConstants.CUSTOMER_BALANCE_LIST){

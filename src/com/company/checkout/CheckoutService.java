@@ -1,5 +1,6 @@
 package com.company.checkout;
 
+import com.company.balance.Balance;
 import com.company.Customer;
 
 public interface CheckoutService {

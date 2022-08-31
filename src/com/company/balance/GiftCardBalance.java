@@ -9,6 +9,8 @@ public class GiftCardBalance extends Balance{
         super(customerId, balance);
     }
 
+
+
     @Override
     public Double addBalance(Double additionalBalance) {
         double promotionAmount = additionalBalance * 10 / 100;
