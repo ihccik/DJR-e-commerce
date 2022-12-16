@@ -30,6 +30,7 @@ public class Cart {
     public Customer getCustomer() {
         return customer;
     }
+    //comment Sumeyye
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
